@@ -61,7 +61,7 @@ const weekend = ["sat", "sun"]
   - JS가 다음 코드 execution을 멈추게 함
  
 
-### ETC
+## ETC
 
 - string + string 연산 시 둘 다 " or ' 통일 해줘야 함
 - variable 이름은 lowerCamelCase
