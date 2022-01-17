@@ -30,6 +30,7 @@
     ~~~ javascript
         h1.classList.toggle(class) // class가 있다면 제거 없다면 추가
     ~~~
+- className을 수정하면 class가 통채로 바뀜
 
 
 ## ETC
