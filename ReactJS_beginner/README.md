@@ -127,4 +127,22 @@
 
 -   component 내의 state가 변경되면 무조건 rendering 다시 함
 -   이 때 api call 같은 작업 등이 component 생성에 들어가 있으면 reload할 때 마다 api 요청을 보내야함
--   이를 방지 하기 위한 기능 useEffect(한 번만 실행할 요소, reload 할 요소)
+-   이를 방지 하기 위한 기능 useEffect(effect, dependency)
+    ```javascript
+    useEffect(() => console.log('Run once'), [state])
+    ```
+    -   dependency가 바뀌면 effect를 실행시킴
+
+## cleanup
+
+-   component가 사라질 때도 특정 함수 실행시키기 가능
+    ```javascript
+    function Hello() {
+        useEffect(() => {
+            console.log('Hi :)')
+            return () => console.log('Bye :(')
+        }, [])
+        return <h1>HELLO!</h1>
+    }
+    ```
+-   자주 사용하는 편은 아님
