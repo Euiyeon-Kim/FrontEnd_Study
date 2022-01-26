@@ -3,6 +3,7 @@
 1. [Week1](#week1)
 2. [Week2](#week2)
 3. [Week3](#week3)
+4. [Week4](#week4)
 
 # Week1
 
@@ -81,3 +82,30 @@
     const [data, setData] = React.useState(0)
     ```
 -   js에 for나 class가 preoccupy되어 있으므로 htmlFor, className 같은 식으로 써줘야함
+-   jsx에 js 코드를 삽입하려면 대괄호로 감싸야함
+
+# Week4
+
+## Props
+
+-   html에서 속성 정하듯이 우리가 만든 component에도 property 전달 가능
+    ```javascript
+    return (
+        <div>
+            <Btn text="Save Changes" />
+            <Btn text="Clear" />
+        </div>
+    )
+    ```
+-   부모 component의 state가 변하면 자식 component도 다 re-render됨
+-   React.memo()로 component를 설정해두면 부모 component의 state가 바뀌더라도 자식 component의 props가 바뀌지 않으면 re-render 되지 않음
+    -   시간 절약 가능
+
+## Proptypes
+
+-   Proptypes 라이브러리로 props의 자료형 확인가능
+-   required 여부도 확인가능
+-   Default value도 설정가능
+    ```javascript
+    const Btn = ({ text, size = 14 }) => {}1
+    ```
