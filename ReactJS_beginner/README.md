@@ -4,6 +4,8 @@
 2. [Week2](#week2)
 3. [Week3](#week3)
 4. [Week4](#week4)
+5. [Week5](#week5)
+6. [Week6](#week6)
 
 # Week1
 
@@ -109,3 +111,20 @@
     ```javascript
     const Btn = ({ text, size = 14 }) => {}1
     ```
+
+# Week5
+
+## CSS Module
+
+-   _.module.css를 작성하고 _.js에 해당 css 파일을 import 해서 class 이름으로 사용가능
+    -   css의 class가 중첩되는 것을 방지할 수 있음
+    -   의도하지 않게 이름 때문에 style이 꼬이는거 방지
+    -   랜덤으로 class 이름 부여
+
+# Week6
+
+## useEffect
+
+-   component 내의 state가 변경되면 무조건 rendering 다시 함
+-   이 때 api call 같은 작업 등이 component 생성에 들어가 있으면 reload할 때 마다 api 요청을 보내야함
+-   이를 방지 하기 위한 기능 useEffect(한 번만 실행할 요소, reload 할 요소)
