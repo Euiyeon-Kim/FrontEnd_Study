@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react'
-
-function Hello() {
-    useEffect(() => {
-        console.log('I created :)')
-        return () => console.log('I destroyed :(')
-    }, [])
-
-    return <h1>HELLO!</h1>
-}
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Detail from './routes/Detail'
+import Home from './routes/Home'
 
 function App() {
-    const [isShowing, setIsShowing] = useState(true)
-    const onClick = () => setIsShowing(cur => !cur)
     return (
-        <div>
-            {isShowing ? <Hello /> : null}
-            <button onClick={onClick}>{isShowing ? 'SHOW' : 'HIDE'}</button>
-        </div>
+        <Router>
+            <Switch>
+                <Route path="/abot-us">
+                    <h1>Hello</h1>
+                </Route>
+                <Route path="/movie/:id">
+                    <Detail />
+                </Route>
+                <Route path="/">
+                    <Home />
+                </Route>
+            </Switch>
+        </Router>
     )
 }
 

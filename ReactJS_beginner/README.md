@@ -146,3 +146,23 @@
     }
     ```
 -   자주 사용하는 편은 아님
+
+# Week7
+
+## React Router
+
+```javascript
+<Router>
+    <Switch>
+        <Route path="/movie/:id">
+            <Detail />
+        </Route>
+        <Route path="/">
+            <Home />
+        </Route>
+    </Switch>
+</Router>
+```
+
+-   위와 같이 여러 페이지 라우팅 가능
+-   :id 의 형태로 parameter 전달 가능
