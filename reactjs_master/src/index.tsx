@@ -1,16 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ThemeProvider } from 'styled-components'
 import App from './App'
-
-const darkTheme = {
-    textcolor: 'whilesmoke',
-    backgroundColor: '#111',
-}
-const whiteTheme = {
-    textcolor: '#111',
-    backgroundColor: 'whitesmoke',
-}
+import { ThemeProvider } from 'styled-components'
+import { darkTheme, lightTheme } from './theme'
 
 ReactDOM.render(
     <React.StrictMode>

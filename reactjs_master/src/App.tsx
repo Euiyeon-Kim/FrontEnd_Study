@@ -1,43 +1,18 @@
-import styled, { keyframes } from 'styled-components'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-const Wrapper = styled.div`
-    display: flex;
+const Container = styled.div`
+    background-color: ${props => props.theme.bgColor};
+`
+const H1 = styled.h1`
+    color: ${props => props.theme.textColor};
 `
 
-const rotate = keyframes`
-    0%{
-        transform: rotate(0deg);
-        border-radius: 0px;
-    } 50%{
-        border-radius: 100px;
-    } 100%{
-        transform: rotate(360deg);
-        border-radius:  0px;
-    }
-`
-
-const Box = styled.div`
-    height: 200px;
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${props => props.theme.backgroundColor};
-    animation: ${rotate} 1s linear infinite;
-    span {
-        font-size: 40px;
-        &:hover {
-            font-size: 60px;
-        }
-    }
-`
 function App() {
     return (
-        <Wrapper>
-            <Box>
-                <span>😀</span>
-            </Box>
-        </Wrapper>
+        <Container>
+            <H1> Protected Text </H1>
+        </Container>
     )
 }
 
