@@ -2,6 +2,7 @@
 
 1. [Week2](#week2)
 2. [Week3](#week3)
+3. [Week4](#week4)
 
 # Week2
 
@@ -151,3 +152,45 @@
         }
     }
     ```
+
+# Week4
+
+## React Query
+
+-   편리하게 데이터를 Fetch할 수 있음
+
+## React Router with Typescript
+
+-   주소로 전달한 파라미터를 사용할 때도 이전과 마찬가지로 interface 알려줘야함
+
+    ```typescript
+    // Version 1
+    const { coinId } = useParams<{ coinId: string }>()
+
+    // Version 2
+    interface RouteParams {
+        coinId: string
+    }
+    const { coinId } = useParams<RouteParams>()
+    ```
+
+## 전체 Document에 style 적용하기
+
+-   styled-component로 전체 document에 style을 적용하려면 createGlobalStyle 생성
+
+    ```typescript
+    return (
+        <>
+            <GlobalStyle />
+            <Router />
+        </>
+    )
+    ```
+
+-   하나의 component만을 반환해야하기 때문에 GlobalStyle과 Router를 <></>와 같은 Fragment로 감싸서 반환
+
+-   GlobalStyle 내부에 [다음 내용](https://github.com/zacanger/styled-reset/blob/master/src/index.ts) 복사
+
+## ETC
+
+-   HTML 특수문자 우측화살표 &rarr;
