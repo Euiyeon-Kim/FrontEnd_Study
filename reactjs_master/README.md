@@ -308,10 +308,15 @@ const { isLoading: infoLoading } = useQuery(['info', coinId], () => fetchCoinInf
 const { isLoading: priceLoading } = useQuery(['price', coinId], () => fetchCoinPrice(coinId))
 ```
 
-## ETC
+-   자동으로 interval마다 재 fetch 가능 (refetchInterval/ms)
 
--   HTML 특수문자 우측화살표 &rarr;
-
+```typescript
+const { isLoading: priceLoading, data: price } = useQuery<IPrice>(['price', coinId], () => fetchCoinPrice(coinId), { refetchInterval: 10000 })
 ```
 
-```
+## Helmet
+
+-   DOM 구조의 head로 가는 기능 제공
+-   npm install react-helmet
+-   npm i --save-dev @types/react-helmet
+-   favicon, title 등을 Routing된 페이지 마다 변경 가능
