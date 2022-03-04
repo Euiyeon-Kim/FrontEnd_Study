@@ -24,11 +24,16 @@ function Chart({ coinId }: IChartProps) {
                 'Loading Chart'
             ) : (
                 <ApexChart
-                    type="line"
+                    type="candlestick"
                     series={[
                         {
                             name: 'Price',
-                            data: data?.map(price => price.close),
+                            data: data?.map(price => {
+                                return {
+                                    x: price.time_close,
+                                    y: [price.open.toFixed(2), price.high.toFixed(2), price.low.toFixed(2), price.close.toFixed(2)],
+                                }
+                            }),
                         },
                     ]}
                     options={{
@@ -39,31 +44,16 @@ function Chart({ coinId }: IChartProps) {
                             height: 300,
                             background: 'transparents',
                         },
-                        grid: { show: false },
-                        yaxis: { show: false },
                         xaxis: {
+                            type: 'datetime',
                             labels: { show: false },
                             axisTicks: { show: false },
                             axisBorder: { show: false },
-                            type: 'datetime',
-                            categories: data?.map(price => price.time_close),
                         },
-                        fill: {
-                            type: 'gradient',
-                            gradient: {
-                                gradientToColors: ['#0be881'],
-                                stops: [0, 100],
-                            },
-                        },
-                        colors: ['#4bcffa'],
-                        stroke: {
-                            curve: 'smooth',
-                            width: 4,
-                        },
+                        yaxis: { show: false },
                         tooltip: {
-                            // 마우스 올리면 보이는 UIs
-                            y: {
-                                formatter: value => `$${value.toFixed(2)}`,
+                            x: {
+                                format: 'dd MMM',
                             },
                         },
                     }}

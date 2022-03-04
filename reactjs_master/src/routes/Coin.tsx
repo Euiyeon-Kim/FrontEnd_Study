@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { Link, Route, Switch, useLocation, useParams, useRouteMatch, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import { fetchCoinInfo, fetchCoinPrice } from '../api'
@@ -67,6 +67,15 @@ const Tab = styled.span<{ isActive: boolean }>`
         display: block;
     }
 `
+const Button = styled.button`
+    width: 60px;
+    height: 30px;
+    display: block;
+    border-radius: 15px;
+    color: ${props => props.theme.accentColor};
+    background-color: ${props => props.theme.bgColor};
+    margin: 20px 0px 0px;
+`
 
 // Interfaces
 interface IRouteState {
@@ -94,7 +103,7 @@ interface IInfo {
     last_data_at: string
 }
 
-interface IPrice {
+export interface IPrice {
     id: string
     name: string
     symbol: string
@@ -131,6 +140,7 @@ interface IPrice {
 function Coin() {
     const { coinId } = useParams<{ coinId: string }>()
     const { state } = useLocation<IRouteState>()
+    const coinMatch = useRouteMatch('/:coinId')
     const priceMatch = useRouteMatch('/:coinId/price')
     const chartMatch = useRouteMatch('/:coinId/chart')
 
@@ -138,12 +148,20 @@ function Coin() {
     const { isLoading: infoLoading, data: info } = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId))
     const { isLoading: priceLoading, data: price } = useQuery<IPrice>(['price', coinId], () => fetchCoinPrice(coinId), { refetchInterval: 10000 })
     const loading = infoLoading || priceLoading
+    const history = useHistory()
 
     return (
         <Container>
             <Helmet>
                 <title>{state?.name ? state.name : loading ? 'Loading...' : info?.name}</title>
             </Helmet>
+            <Button
+                onClick={() => {
+                    coinMatch?.isExact ? history.goBack() : history.push('/')
+                }}
+            >
+                &larr;
+            </Button>
             <Header>
                 <Title>{state?.name ? state.name : loading ? 'Loading...' : info?.name}</Title>
             </Header>
@@ -190,7 +208,7 @@ function Coin() {
 
                     <Switch>
                         <Route path={`/:coinId/price`}>
-                            <Price />
+                            <Price price={price} />
                         </Route>
                         <Route path={`/:coinId/chart`}>
                             <Chart coinId={coinId} />
