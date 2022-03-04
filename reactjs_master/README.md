@@ -133,7 +133,6 @@
 ## Theme
 
 -   Styled-component Theme을 Typescript와 함께 사용하려면 Theme의 type을 customize한 styled.d.ts 파일 필요
-
 -   아래와 같은 형식으로 기존의 styled-components의 type inherit
 
     ```typescript
@@ -177,7 +176,6 @@
 ## 전체 Document에 style 적용하기
 
 -   styled-component로 전체 document에 style을 적용하려면 createGlobalStyle 생성
-
     ```typescript
     return (
         <>
@@ -186,11 +184,134 @@
         </>
     )
     ```
-
 -   하나의 component만을 반환해야하기 때문에 GlobalStyle과 Router를 <></>와 같은 Fragment로 감싸서 반환
-
 -   GlobalStyle 내부에 [다음 내용](https://github.com/zacanger/styled-reset/blob/master/src/index.ts) 복사
+
+## React Query없이 API 값 가져오기
+
+-   javascript랑 매한가지
+    ```typescript
+    useEffect(() => {
+        ;(async () => {
+            const response = await fetch('https://api.coinpaprika.com/v1/coins')
+            const json = await response.json()
+            setCoins(json.slice(0, 100))
+        })()
+    }, [coins])
+    ```
+-   짧은 함수 즉시 실행하기
+    ```typescript
+    ;(function() => {})()
+    ```
+
+## React Query없이 Loading 화면 만들기
+
+-   setState로 loading boolean변수 생성
+    ```typescript
+    const [loading, setLoading] = useState<boolean>(true)
+    ```
+-   useEffect등을 사용한 fetching이 끝나면 loading false로 전환
+-   loading 상태에 따라 화면 다르게 return
+    ```typescript
+    return loading ? <Loading /> : <LoadDone />
+    ```
+-   위와 같은 방식으로 사이트를 만들면 다른 사이트로 이동할 때 state가 사라져서 계속 reload
+
+## 화면전환 시 주소가 아닌 방법으로 정보 전달하기
+
+-   Link태그의 to에 path와 state를 포함해서 state에 다른 parameter 전달 가능
+
+```typescript
+    <Link
+        to={{
+            pathname: `/${coin.id}`,
+            state: { name: `${coin.name}` },
+        }}
+    >
+```
+
+-   위와 같은 방법으로 정보 전달 시 이전 페이지에서 얻은 정보로 다음 페이지를 구성하기 때문에 URL을 통해 후반 페이지에 바로 접근하면 문제가 생김
+
+## Nested Router
+
+-   웹사이트의 탭이나 스크린의 여러 파트가 나누어져 있을 때 유용
+-   URL을 사용해서 Element를 숨기고 보여줄 수 있음
+
+    ```typescript
+    return (
+        ...
+        <Link to={`/${coinId}/chart`}> Chart </Link>
+        <Link to={`/${coinId}/price`}> Price </Link>
+
+        <Switch>
+            <Route path={`/${coinId}/price`}>
+                <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+                <Chart />
+            </Route>
+        </Switch>
+        ...
+        )
+    ```
+
+-   useRoutematch를 사용하면 현재 url이 어딘지 체크할 수 있음
+
+## React-Query
+
+-   다음 코드를 한 줄로 축약할 수 있음
+
+```typescript
+const [coins, setCoins] = useState<CoinInterface[]>([])
+const [loading, setLoading] = useState<boolean>(true)
+useEffect(() => {
+    ;(async () => {
+        const response = await fetch('https://api.coinpaprika.com/v1/coins')
+        const json = await response.json()
+        setCoins(json.slice(0, 100))
+        setLoading(false)
+    })()
+}, [coins])
+```
+
+-   일단 QueryProvider로 App 감싸고 시작
+
+-   Loading 중인지 확인하는 기능도 제공
+
+```typescript
+// isLoading과 data는 예약어
+// "allCoins"는 query의 id로 , query 마다 다른 값을 가지고 있어야 함
+const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins)
+```
+
+-캐싱 기능도 제공하기 때문에 다른 페이지로 이동 후 돌아와도 loading하지 않음
+
+```typescript
+// 아래와 같이 캐시 확인 가능
+function App() {
+    return (
+        <>
+            <GlobalStyle />
+            <Router />
+            <ReactQueryDevtools initialIsOpen={true} />
+        </>
+    )
+}
+```
+
+-   여러 정보를 한 페이지에서 가져와야 할 때 아래와 같이 loading 가능
+
+```typescript
+// Query ID는 배열형태
+// JS의 기본 기능을 사용해서 isLoading은 이름 변경기능
+const { isLoading: infoLoading } = useQuery(['info', coinId], () => fetchCoinInfo(coinId))
+const { isLoading: priceLoading } = useQuery(['price', coinId], () => fetchCoinPrice(coinId))
+```
 
 ## ETC
 
 -   HTML 특수문자 우측화살표 &rarr;
+
+```
+
+```

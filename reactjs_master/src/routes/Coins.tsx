@@ -1,46 +1,54 @@
 import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { fetchCoins } from '../api'
 
 const Container = styled.div`
     padding: 0px 20px;
     max-width: 480px;
     margin: 0 auto; // 중앙 정렬
 `
-
 const Header = styled.header`
-    height: 10vh;
+    height: 15vh;
     display: flex;
     justify-content: center;
     align-items: center;
 `
-
 const CoinsList = styled.ul``
-
 const Coin = styled.li`
     background-color: white;
     color: ${props => props.theme.bgColor};
-    margin-bottom: 10px;
     border-radius: 15px;
+    margin-bottom: 10px;
     a {
+        display: flex;
+        align-items: center;
         padding: 20px;
         transition: color 0.15s ease-in; // 자연스럽게 색 전환
-        display: block; // 텍스트가 아니라 버튼을 눌러도 Routing 가능
     }
     &:hover {
         a {
-            // <Link>는 어짜피 <a>로 바뀜
             color: ${props => props.theme.accentColor};
         }
     }
 `
-
 const Title = styled.h1`
     font-size: 48px;
     color: ${props => props.theme.accentColor};
 `
+const Loader = styled.span`
+    text-align: center;
+    display: block;
+    font-size: 48px;
+`
+const Img = styled.img`
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+`
 
-interface CoinInterface {
+interface ICoin {
     id: string
     name: string
     symbol: string
@@ -51,20 +59,32 @@ interface CoinInterface {
 }
 
 function Coins() {
-    const [coins, setCoins] = useState<CoinInterface[]>([])
-    useEffect(() => {}, [])
+    const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins)
+
     return (
         <Container>
             <Header>
-                <Title>코인</Title>
+                <Title>Top 100 Coins</Title>
             </Header>
-            <CoinsList>
-                {coins.map(coin => (
-                    <Coin key={coin.id}>
-                        <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
-                    </Coin>
-                ))}
-            </CoinsList>
+            {isLoading ? (
+                <Loader>Loading...</Loader>
+            ) : (
+                <CoinsList>
+                    {data?.slice(0, 100).map(coin => (
+                        <Coin key={coin.id}>
+                            <Link
+                                to={{
+                                    pathname: `/${coin.id}`,
+                                    state: { name: `${coin.name}` },
+                                }}
+                            >
+                                <Img src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+                                {coin.name} &rarr;
+                            </Link>
+                        </Coin>
+                    ))}
+                </CoinsList>
+            )}
         </Container>
     )
 }
