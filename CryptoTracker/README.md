@@ -3,6 +3,7 @@
 1. [Week2](#week2)
 2. [Week3](#week3)
 3. [Week4](#week4)
+4. [Week5](#week5)
 
 # Week2
 
@@ -320,3 +321,57 @@ const { isLoading: priceLoading, data: price } = useQuery<IPrice>(['price', coin
 -   npm install react-helmet
 -   npm i --save-dev @types/react-helmet
 -   favicon, title 등을 Routing된 페이지 마다 변경 가능
+
+# Week5
+
+## State management tool 없이 하위 component가 상위 component state에 접근
+
+-   Props로 계속 state와 setState함수 전달 전달
+
+```typescript
+interface IRouterProps {
+    toggleDark: () => void
+}
+```
+
+-   Global state: 컴포넌트 위치에 상관없이 계속 접근해야 하는 state
+    ex) Theme, Login 상태 등등
+
+## Recoil
+
+-   계층적으로 전달해줄 필요 없이 바로 state에 접근 가능
+-   Index에서 App을 RecoilRoot로 감싸주면 준비 끝
+
+```typescript
+    <React.StrictMode>
+        <RecoilRoot>
+            <QueryClientProvider client={queryClient}>
+                <App />
+            </QueryClientProvider>
+        </RecoilRoot>
+    </React.StrictMode>,
+```
+
+-   아무 component에서나 접근 가능한 atom 생성
+
+```typescript
+import { atom } from 'recoil'
+
+export const isDarkAtom = atom({
+    key: 'isDark',
+    default: false,
+})
+```
+
+-   Component에서 값 접근
+
+```typescript
+const isDark = useRecoilValue(isDarkAtom)
+```
+
+-   Component에서 값 수정 이전과 마찬가지로 Current value에 바로 접근 가능
+
+```typescript
+const setFn = useSetRecoilState(isDarkAtom)
+<button onClick={() => setFn(cur => !cur)}>Toggle Mode</button>
+```
