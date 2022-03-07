@@ -375,3 +375,17 @@ const isDark = useRecoilValue(isDarkAtom)
 const setFn = useSetRecoilState(isDarkAtom)
 <button onClick={() => setFn(cur => !cur)}>Toggle Mode</button>
 ```
+
+## React-hook-form
+
+-   useForm 함수를 통해 필요한 모든 인자 Import
+
+```typescript
+const { register, handleSubmit, formState } = useForm()
+```
+
+-아래와 같이 해줌으로써 validation, onChange 다 가능
+
+```typescript
+<input {...register('UserName', { required: 'User name is required', minLength: 10 })} placeholder="Write a username" />
+```
