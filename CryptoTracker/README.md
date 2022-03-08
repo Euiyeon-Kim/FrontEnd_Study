@@ -376,6 +376,24 @@ const setFn = useSetRecoilState(isDarkAtom)
 <button onClick={() => setFn(cur => !cur)}>Toggle Mode</button>
 ```
 
+-   위 두 작업을 한 번에 할 수 있음
+
+```typescript
+const [toDos, setToDos] = useRecoilState(toDoState)
+```
+
+-   Selector는 Atom의 state를 받아와서 정렬 및 가공할 수 있게 해줌
+
+```typescript
+export const toDoSelector = selector({
+    key: 'toDoSelector',
+    get: ({ get }) => {
+        const toDos = get(toDoState)
+        return [toDos.filter(toDo => toDo.category === 'TO_DO'), toDos.filter(toDo => toDo.category === 'DOING'), toDos.filter(toDo => toDo.category === 'DONE')]
+    },
+})
+```
+
 ## React-hook-form
 
 -   useForm 함수를 통해 필요한 모든 인자 Import
@@ -388,4 +406,12 @@ const { register, handleSubmit, formState } = useForm()
 
 ```typescript
 <input {...register('UserName', { required: 'User name is required', minLength: 10 })} placeholder="Write a username" />
+```
+
+## ETC
+
+-   JS에서 && 연산자의 좌항이 true면 우항을 그대로 반환한다
+
+```typescript
+    return {category !== 'DONE' && <button>Done</button>}
 ```
