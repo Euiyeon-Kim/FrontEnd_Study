@@ -22,9 +22,23 @@ export const categoryState = atom<Categories>({
     default: Categories.TO_DO,
 })
 
+function getStoraged() {
+    const savedToDos = localStorage.getItem('todos')
+    if (savedToDos != null) {
+        return JSON.parse(savedToDos)
+    } else return []
+}
+
 export const toDoState = atom<IToDo[]>({
     key: 'toDos',
-    default: [],
+    default: getStoraged(),
+    effects: [
+        ({ onSet }) => {
+            onSet(newToDos => {
+                localStorage.setItem('todos', JSON.stringify(newToDos))
+            })
+        },
+    ],
 })
 
 export const toDoSelector = selector({
