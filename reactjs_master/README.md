@@ -4,6 +4,7 @@
 2. [Week3](#week3)
 3. [Week4](#week4)
 4. [Week5](#week5)
+5. [Week7](#week7)
 
 # Week2
 
@@ -15,7 +16,7 @@
         background-color: tomato;
         width: 100px;
         height: 100px;
-    `
+    `;
     // App에서 return <Box1></Box1>
     ```
 -   props를 사용해서 Component를 수정가능하게 만들기 가능
@@ -25,7 +26,7 @@
         background-color: ${props => props.bgColor};
         width: 100px;
         height: 100px;
-    `
+    `;
     // App에서 <Box bgColor="pink"></Box> or <Box bgColor="tomato"></Box>
     ```
 
@@ -33,7 +34,7 @@
     ```javascript
     const Circle = styled(Box)`
         border-radius: 50px;
-    `
+    `;
     ```
 -   같은 style을 다른 태그로 사용하고 싶을 경우
     ```javascript
@@ -60,7 +61,7 @@
                 transform: rotate(360deg);
                 border-radius:  0px;
             }
-        `
+        `;
     ```
 
 -   styled component에서 하위 태그도 접근 가능
@@ -72,7 +73,7 @@
         span {
             font-size: 40px;
         }
-    `
+    `;
     // Box 태그 하위의 span에 접근
     ```
 
@@ -94,11 +95,11 @@
 
     ```typescript
     interface CircleProps {
-        bgColor: string
-        borderColor?: string // ? indicates optional
+        bgColor: string;
+        borderColor?: string; // ? indicates optional
     }
     function Circle({ bgColor }: CircleProps) {
-        return <Container />
+        return <Container />;
     }
     ```
 
@@ -106,7 +107,9 @@
     ??를 사용해서 Default값 설정 가능
     ```typescript
     function Circle({ bgColor, borderColor }: CircleProps) {
-        return <Container bgColor={bgColor} borderColor={borderColor ?? bgColor} />
+        return (
+            <Container bgColor={bgColor} borderColor={borderColor ?? bgColor} />
+        );
     }
     ```
 
@@ -114,21 +117,21 @@
 
 -   React에서는 state선언을 통해 값이 바뀔 때 마다 rendering 가능
     ```typescript
-    const [value, setValue] = useState(1)
+    const [value, setValue] = useState(1);
     ```
 -   Typescript는 초기값을 통해 자료형 예측
 -   명시적으로 여러 개 설정 가능
     ```typescript
-    const [value, setValue] = useState<number | string>(1)
+    const [value, setValue] = useState<number | string>(1);
     ```
 -   Event도 type을 지정하면 auto complete 사용할 수 있음
     ```typescript
     const onChange = (event: React.FormEvent<HTMLInputElement>) => {
         const {
             currentTarget: { value },
-        } = event
-        setValue(value)
-    }
+        } = event;
+        setValue(value);
+    };
     ```
 
 ## Theme
@@ -138,17 +141,17 @@
 
     ```typescript
     // import original module declarations
-    import 'styled-components'
+    import 'styled-components';
 
     // and extend them!
     declare module 'styled-components' {
         export interface DefaultTheme {
-            borderRadius: string
+            borderRadius: string;
 
             colors: {
-                main: string
-                secondary: string
-            }
+                main: string;
+                secondary: string;
+            };
         }
     }
     ```
@@ -165,13 +168,13 @@
 
     ```typescript
     // Version 1
-    const { coinId } = useParams<{ coinId: string }>()
+    const { coinId } = useParams<{ coinId: string }>();
 
     // Version 2
     interface RouteParams {
-        coinId: string
+        coinId: string;
     }
-    const { coinId } = useParams<RouteParams>()
+    const { coinId } = useParams<RouteParams>();
     ```
 
 ## 전체 Document에 style 적용하기
@@ -183,7 +186,7 @@
             <GlobalStyle />
             <Router />
         </>
-    )
+    );
     ```
 -   하나의 component만을 반환해야하기 때문에 GlobalStyle과 Router를 <></>와 같은 Fragment로 감싸서 반환
 -   GlobalStyle 내부에 [다음 내용](https://github.com/zacanger/styled-reset/blob/master/src/index.ts) 복사
@@ -193,12 +196,14 @@
 -   javascript랑 매한가지
     ```typescript
     useEffect(() => {
-        ;(async () => {
-            const response = await fetch('https://api.coinpaprika.com/v1/coins')
-            const json = await response.json()
-            setCoins(json.slice(0, 100))
-        })()
-    }, [coins])
+        (async () => {
+            const response = await fetch(
+                'https://api.coinpaprika.com/v1/coins'
+            );
+            const json = await response.json();
+            setCoins(json.slice(0, 100));
+        })();
+    }, [coins]);
     ```
 -   짧은 함수 즉시 실행하기
     ```typescript
@@ -209,12 +214,12 @@
 
 -   setState로 loading boolean변수 생성
     ```typescript
-    const [loading, setLoading] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(true);
     ```
 -   useEffect등을 사용한 fetching이 끝나면 loading false로 전환
 -   loading 상태에 따라 화면 다르게 return
     ```typescript
-    return loading ? <Loading /> : <LoadDone />
+    return loading ? <Loading /> : <LoadDone />;
     ```
 -   위와 같은 방식으로 사이트를 만들면 다른 사이트로 이동할 때 state가 사라져서 계속 reload
 
@@ -263,16 +268,16 @@
 -   다음 코드를 한 줄로 축약할 수 있음
 
 ```typescript
-const [coins, setCoins] = useState<CoinInterface[]>([])
-const [loading, setLoading] = useState<boolean>(true)
+const [coins, setCoins] = useState<CoinInterface[]>([]);
+const [loading, setLoading] = useState<boolean>(true);
 useEffect(() => {
-    ;(async () => {
-        const response = await fetch('https://api.coinpaprika.com/v1/coins')
-        const json = await response.json()
-        setCoins(json.slice(0, 100))
-        setLoading(false)
-    })()
-}, [coins])
+    (async () => {
+        const response = await fetch('https://api.coinpaprika.com/v1/coins');
+        const json = await response.json();
+        setCoins(json.slice(0, 100));
+        setLoading(false);
+    })();
+}, [coins]);
 ```
 
 -   일단 QueryProvider로 App 감싸고 시작
@@ -282,7 +287,7 @@ useEffect(() => {
 ```typescript
 // isLoading과 data는 예약어
 // "allCoins"는 query의 id로 , query 마다 다른 값을 가지고 있어야 함
-const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins)
+const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins);
 ```
 
 -캐싱 기능도 제공하기 때문에 다른 페이지로 이동 후 돌아와도 loading하지 않음
@@ -296,7 +301,7 @@ function App() {
             <Router />
             <ReactQueryDevtools initialIsOpen={true} />
         </>
-    )
+    );
 }
 ```
 
@@ -305,14 +310,22 @@ function App() {
 ```typescript
 // Query ID는 배열형태
 // JS의 기본 기능을 사용해서 isLoading은 이름 변경기능
-const { isLoading: infoLoading } = useQuery(['info', coinId], () => fetchCoinInfo(coinId))
-const { isLoading: priceLoading } = useQuery(['price', coinId], () => fetchCoinPrice(coinId))
+const { isLoading: infoLoading } = useQuery(['info', coinId], () =>
+    fetchCoinInfo(coinId)
+);
+const { isLoading: priceLoading } = useQuery(['price', coinId], () =>
+    fetchCoinPrice(coinId)
+);
 ```
 
 -   자동으로 interval마다 재 fetch 가능 (refetchInterval/ms)
 
 ```typescript
-const { isLoading: priceLoading, data: price } = useQuery<IPrice>(['price', coinId], () => fetchCoinPrice(coinId), { refetchInterval: 10000 })
+const { isLoading: priceLoading, data: price } = useQuery<IPrice>(
+    ['price', coinId],
+    () => fetchCoinPrice(coinId),
+    { refetchInterval: 10000 }
+);
 ```
 
 ## Helmet
@@ -330,7 +343,7 @@ const { isLoading: priceLoading, data: price } = useQuery<IPrice>(['price', coin
 
 ```typescript
 interface IRouterProps {
-    toggleDark: () => void
+    toggleDark: () => void;
 }
 ```
 
@@ -355,18 +368,18 @@ interface IRouterProps {
 -   아무 component에서나 접근 가능한 atom 생성
 
 ```typescript
-import { atom } from 'recoil'
+import { atom } from 'recoil';
 
 export const isDarkAtom = atom({
     key: 'isDark',
     default: false,
-})
+});
 ```
 
 -   Component에서 값 접근
 
 ```typescript
-const isDark = useRecoilValue(isDarkAtom)
+const isDark = useRecoilValue(isDarkAtom);
 ```
 
 -   Component에서 값 수정 이전과 마찬가지로 Current value에 바로 접근 가능
@@ -379,7 +392,7 @@ const setFn = useSetRecoilState(isDarkAtom)
 -   위 두 작업을 한 번에 할 수 있음
 
 ```typescript
-const [toDos, setToDos] = useRecoilState(toDoState)
+const [toDos, setToDos] = useRecoilState(toDoState);
 ```
 
 -   Selector는 Atom의 state를 받아와서 정렬 및 가공할 수 있게 해줌
@@ -388,10 +401,14 @@ const [toDos, setToDos] = useRecoilState(toDoState)
 export const toDoSelector = selector({
     key: 'toDoSelector',
     get: ({ get }) => {
-        const toDos = get(toDoState)
-        return [toDos.filter(toDo => toDo.category === 'TO_DO'), toDos.filter(toDo => toDo.category === 'DOING'), toDos.filter(toDo => toDo.category === 'DONE')]
+        const toDos = get(toDoState);
+        return [
+            toDos.filter(toDo => toDo.category === 'TO_DO'),
+            toDos.filter(toDo => toDo.category === 'DOING'),
+            toDos.filter(toDo => toDo.category === 'DONE'),
+        ];
     },
-})
+});
 ```
 
 ## React-hook-form
@@ -399,13 +416,19 @@ export const toDoSelector = selector({
 -   useForm 함수를 통해 필요한 모든 인자 Import
 
 ```typescript
-const { register, handleSubmit, formState } = useForm()
+const { register, handleSubmit, formState } = useForm();
 ```
 
 -아래와 같이 해줌으로써 validation, onChange 다 가능
 
 ```typescript
-<input {...register('UserName', { required: 'User name is required', minLength: 10 })} placeholder="Write a username" />
+<input
+    {...register('UserName', {
+        required: 'User name is required',
+        minLength: 10,
+    })}
+    placeholder="Write a username"
+/>
 ```
 
 ## ETC
@@ -415,3 +438,121 @@ const { register, handleSubmit, formState } = useForm()
 ```typescript
     return {category !== 'DONE' && <button>Done</button>}
 ```
+
+# Week2
+
+## Framer Motion
+
+-   ReactJS에서 애니메이션 도와주는 라이브러리
+-   모든 html 태그를 지원하는데 motion.tag이름으로 컴포넌트 생성해야함
+-   Styled component를 움직이려면 styled component 생성시 아래와 같이 생성
+    ```typescript
+    const Box = styled(motion.div);
+    return (
+        <Box
+            transition={{ delay: 3, duration: 2 }}
+            animate={{ borderRadius: '100px' }}
+        />
+    );
+    ```
+-   transition 옵션에서 물리 법칙을 어느정도 시뮬레이션 할 수 있음
+
+## Varients
+
+-   애니메이션의 스테이지
+-   여러 애니메이션을 묶을 수 있음
+
+    ```typescript
+    const myVarient = {
+    start: { scale: 0 },
+    end: { scale: 1, rotateZ: 360, transition: { type: 'spring', damping: 10 } },
+    }
+
+    <Box variants={myVarient} initial="start" animate="end" />
+    ```
+
+-   자식 Component는 부모 component variant 옵션을 그대로 상속
+
+    ```typescript
+    // 이 때 circle에도 initial="start" animate="end" 옵션이 있는 것 처럼 동작
+    return (
+        <Box variants={boxVar} initial="start" animate="end">
+            <Circle variants={circleVar} />
+        </Box>
+    );
+    ```
+
+-   자식 컴포넌트 애니메이션 속도 제어 가능
+    ```typescript
+    const boxVar = {
+        start: {
+            scale: 0.5,
+        },
+        end: {
+            scale: 1,
+            transition: {
+                delayChildren: 0.5, // 자식 컴포넌트 전체 delay
+                staggerChildren: 0.5, // 자식 컴포넌트 순서대로 +0.5씩 delay
+            },
+        },
+    };
+    ```
+-   이벤트에 따라서도 제어 가능
+    ```typescript
+    return <Box variants={boxVar} whileHover="hover" whileTap="click" />;
+    ```
+
+## Motion Value
+
+-   모션을 트랙킹하고 싶을 때 사용가능
+
+    ```typescript
+    const x = useMotionValue(0);
+    return <Box style={{ x }} drag="x" dragSnapToOrigin />;
+    ```
+
+-   React state로 취급되지 않기 때문에 값이 변하더라도 component가 rerender되지 않음
+-   transform 값을 interpolation을 통해 구할 수 있음
+
+    ```typescript
+    const x = useMotionValue(0);
+    const scale = useTransform(x, [-800, 0, 800], [2, 1, 0]);
+    return (
+        <Wrapper>
+            <Box style={{ x, scale }} drag="x" dragSnapToOrigin />
+        </Wrapper>
+    );
+    ```
+
+-   HTML 태그 안에서 애니메이션 마다 속도 제어 가능
+
+```typescript
+    transition={{
+        default: { duration: 3 },
+        fill: { duration: 1, delay: 1 },
+    }}
+```
+
+## AnimatePresence
+
+-   Component가 사라지는 것도 animation으로 표현 가능 (exit 옵션에 추가 가능)
+
+```typescript
+return (
+    <Box
+        variants={boxVar}
+        initial="start"
+        animate="visible"
+        exit="leaving"
+    ></Box>
+);
+```
+
+## Custom
+
+-   Variant에 argument 전달할 수 있음
+
+## Layout
+
+-   외부에서 스타일이 바뀌더라도 animation으로 만들 수 있음
+-   SharedLayout으로 두 개의 다른 component를 자연스럽게 렌더링할 수 있음
