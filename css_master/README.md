@@ -1,7 +1,8 @@
 # 목차
 
 1. [기본 CSS](#기본-css)
-2. [Week1](#week1)
+2. [Week1 - Flex](#week1)
+3. [Week2 - Grid](#week2)
 
 # 기본 CSS
 
@@ -78,3 +79,125 @@
 ### Flex-basis
 
 -   Flex-grow, Flex-shrink 전에 basic 크기를 제공
+
+# Week2
+
+## Grid
+
+-   Flex로는 그리드 형태를 만들기 어려워서 등장
+
+### grid-template-row / column
+
+-   Template으로 표 쉽게 생성 가능
+    ```css
+    body {
+        display: grid;
+        grid-template-columns: 250px 250px 250px;
+        column-gap: 10px;
+        row-gap: 10px;
+    }
+    ```
+-   repeat(반복 횟수, 반복 대상)으로 쉽게 반복 가능
+    ```css
+    grid-template-columns: repeat(4, 200px);
+    ```
+-   grid-template-areas로 레이아웃 생성 가능
+    ```css
+    .grid {
+        grid-template-areas:
+            'h h h h'
+            'c c c n'
+            'c c c n'
+            'f f f f ';
+    }
+    .footer {
+        grid-area: f;
+    }
+    ```
+
+### grid-column-start / end
+
+-   Grid에 들어가는 element에서 직접 언제 시작하고 언제 끝나는지 알려줄 수 있음
+
+    ```css
+    .header {
+        grid-column-start: 1;
+        grid-column-end: 5; /*두 칸짜리*/
+        grid-column: 1 / 5; /*위 두 줄이랑 같은 의미*/
+        grid-column: 1 / -1; /*처음부터 끝까지*/
+        grid-column: span 4; /*네 칸 차지*/
+        grid-column: 1 / span 4; /*시작 줄 지정 네 칸 차지*/
+    }
+    ```
+
+### grid-template
+
+-   모든 템플릿 다 통합해서 적기
+    ```css
+    .grid {
+        /*각 줄 끝에 높이 지정*/
+        grid-template:
+            'h h h h' 1fr
+            'c c c n' 2fr
+            'f f f f' 1fr / 1fr 1fr 1fr 1fr; /*맨 마지막에 각 column 크기 지정*/
+    }
+    .footer {
+        grid-area: f;
+    }
+    ```
+-   Grid template에서는 repeat 사용 안됨
+
+### Justify-items / Align-itmes / Place-items
+
+-   Flex랑 비슷하게 동작
+-   row가 justify-items, column이 align-items
+-   Default는 stretch -> 각 칸을 다 채우기
+-   place-items: vertical horizontal을 띄어쓰기로 구분해서 한 줄로 씀
+
+### Justify-content / Align-content / Place-content
+
+-   justify-item은 칸 하나하나를 의미
+-   content는 칸들이 합쳐진 그리드 자체를 의미
+-   row가 justify-content, column이 align-content
+-   place-content: vertical horizontal을 띄어쓰기로 구분해서 한 줄로 씀
+
+### Justify-self / Align-self / Place-self
+
+-   row가 justify-self, column이 align-self
+-   place-self: vertical horizontal을 띄어쓰기로 구분해서 한 줄로 씀
+
+### Grid-auto-column / row / flow
+
+-   grid-auto-flow: 설정한 그리드 크기보다 커졌을 경우 content를 늘릴 방향
+-   grid-auto-columns: 설정한 그리드 크기보다 커졌을 경우 추가할 cell의 크기
+
+### Minmax
+
+-   Grid 한 Cell의 크기를 정할 수 있음
+    ```css
+    .grid {
+        grid-template-columns: repeat(10, minmax(100px, 1fr));
+    }
+    ```
+-   minimum을 만족할 수 없는 화면 크기가 되면, 스크롤이 생김
+
+### Auto-fill / Auto-feat
+
+-   auto-fill: 조건을 만족하는 가장 많은 column 생성
+    ```css
+    .grid:first-child {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    ```
+-   auto-fit: 현재 화면에 맞게 stretch
+    ```css
+    .grid:first-child {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    ```
+
+### Max-content / Min-content
+
+-   Content 크기에 따라 grid 크기도 변경 가능
+-   max-content: Content가 필요한 만큼 박스를 늘림
+-   min-content: Content가 차지하는 minimum만큼 박스를 줄임

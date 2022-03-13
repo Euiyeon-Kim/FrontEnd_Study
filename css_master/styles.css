@@ -1,21 +1,22 @@
-body {
-    display: flex;
-    height: 100vh;
-    justify-content: space-around;
-}
-
-.box {
-    width: 200px;
-    height: 200px;
-    background: cornflowerblue;
+.grid {
+    display: grid;
     color: white;
-    font-size: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 10px;
+    height: 50vh;
+    grid-template-columns: repeat(10, minmax(100px, 1fr));
+    grid-template-rows: repeat(4, 100px);
 }
 
-.box:nth-child(2) {
-    background-color: black;
-    flex-grow: 1;
+.grid:first-child {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+.grid:last-child {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.item:nth-child(odd) {
+    background-color: steelblue;
+}
+.item:nth-child(even) {
+    background-color: seagreen;
 }
