@@ -86,7 +86,7 @@
 
 -   Flex로는 그리드 형태를 만들기 어려워서 등장
 
-### grid-template-row / column
+### grid-template-row / grid-template-column
 
 -   Template으로 표 쉽게 생성 가능
     ```css
@@ -115,7 +115,7 @@
     }
     ```
 
-### grid-column-start / end
+### grid-column-start / grid-column-end 
 
 -   Grid에 들어가는 element에서 직접 언제 시작하고 언제 끝나는지 알려줄 수 있음
 
@@ -129,6 +129,8 @@
         grid-column: 1 / span 4; /*시작 줄 지정 네 칸 차지*/
     }
     ```
+### grid-area
+- grid-row-start / grid-column-start / grid-row-end / grid-column-end 순으로 적어서 단축 가능
 
 ### grid-template
 
