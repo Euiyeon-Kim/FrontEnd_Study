@@ -541,6 +541,11 @@ setAllBoards(oldBoards => {
 });
 ```
 
+## Reference
+
+-   React code에서 HTML element에 접근하고 수정하고 싶을 때 사용
+-   vanilla javascript에서 document.getElementbyId와 유사한 기능
+
 # Week7
 
 ## Framer Motion

@@ -1,14 +1,18 @@
 import { atom } from 'recoil';
 
+export interface IBoardItem {
+    id: number;
+    content: string;
+}
 interface IAllBoardsState {
-    [key: string]: string[];
+    [key: string]: IBoardItem[];
 }
 
 export const allBoardsState = atom<IAllBoardsState>({
     key: 'allboards',
     default: {
-        'To Do': ['a', 'b'],
-        Doing: ['c', 'd', 'e'],
-        Done: ['f'],
+        'To Do': [],
+        Doing: [],
+        Done: [],
     },
 });
