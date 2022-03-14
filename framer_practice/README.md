@@ -4,8 +4,7 @@
 2. [Week3](#week3)
 3. [Week4](#week4)
 4. [Week5](#week5)
-5. [Week6](#week6)
-6. [Week7](#week7)
+5. [Week7](#week7)
 
 # Week2
 
@@ -412,11 +411,6 @@ export const toDoSelector = selector({
 });
 ```
 
--   Selector는 useRecoilState로 받아왔을 때 get과 set 반환
-    ```typescript
-    const [toDos, setToDos] = useRecoilState(toDoSelector);
-    ```
-
 ## React-hook-form
 
 -   useForm 함수를 통해 필요한 모든 인자 Import
@@ -445,103 +439,7 @@ const { register, handleSubmit, formState } = useForm();
     return {category !== 'DONE' && <button>Done</button>}
 ```
 
-# Week6
-
-## React-beautiful-dnd
-
--   드래그 앤 드랍 모션을 도와주는 라이브러리
--   DragDropContext -> Droppable -> Draggable 영역이 정의되어야 함
--   Draggable과 Droppable은 HTML elements를 함수 형태로 return 해야함
-
-## DragDropContext
-
--   onDragEnd 함수를 prop으로 받음
-
-## Draggable / Droppable
-
--   기본 셋업
-    ```typescript
-    return (
-        <Droppable droppableId="one">
-            {provided => (
-                <ul ref={provided.innerRef} {...provided.droppableProps}>
-                    <Draggable draggableId="first" index={0}>
-                        {provided => (
-                            <li
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                            >
-                                One
-                            </li>
-                        )}
-                    </Draggable>
-                </ul>
-            )}
-        </Droppable>
-    );
-    ```
--   dragHandleProps는 element의 아무데나 잡고 드래그가 가능하도록 함
-
-## Draggable list 만들기
-
--   map으로 element return
--   map으로 각 item과 index받아올 수 있음 (like python enumerate)
-
-    ```typescript
-    {
-        toDos.map((toDo, index) => (
-            <Draggable key={toDo} draggableId={toDo} index={index}>
-                {provided => (
-                    <Card
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                    >
-                        <span>🔥</span>
-                        {toDo}
-                    </Card>
-                )}
-            </Draggable>
-        ));
-    }
-    ```
-
--   key랑 draggableId는 무조건 같아야 함
-
-## Draggable Element가 Droppable에서 빠졌을 때 크기 유지 하기
-
--   Draggable component 태그가 닫힌 후 바로 다음에 {provided.placeholder}
-
-## Draggable이 끝나면 Array 순서 수정하기
-
--   arr.splice(시작 위치, 삭제할 요소 수, 추가할 요소)
--   mutation method
--   Recoil state는 mutatable 하지 않기 때문에 그대로 사용 불가
-
-## 성능 개선 - react.memo
-
--   React.js에서는 부모 컴포넌트가 바뀌면 자식 컴포넌트는 싹 다 다시 렌더링
--   Component가 받고 있는 props가 바뀌지 않으면 rendering하지 말라고 설정 가능
-    ```typescript
-    export default React.memo(DraggableCard);
-    ```
-
-## Obecjt 중에 일부 key, value만 교체
-
-```typescript
-setAllBoards(oldBoards => {
-    const changedBoard = [...oldBoards[source.droppableId]];
-    changedBoard.splice(source.index, 1);
-    changedBoard.splice(destination.index, 0, draggableId);
-    return {
-        ...oldBoards,
-        [source.droppableId]: changedBoard,
-    };
-});
-```
-
-# Week7
+# Week2
 
 ## Framer Motion
 

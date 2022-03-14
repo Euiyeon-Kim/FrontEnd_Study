@@ -1,153 +1,73 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { allBoardsState } from './atoms';
+import Board from './components/Board';
 
-const Wrapper = styled(motion.div)`
+const Wrapper = styled.div`
+    display: flex;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    margin: 0 auto;
     align-items: center;
-    background: linear-gradient(45deg, #3988f6, #9482fe);
-    overflow: hidden;
+    justify-content: center;
 `;
 
-const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 50%;
-    grid-gap: 10px;
-
-    & > div:nth-of-type(1) {
-        transform-origin: right bottom;
-    }
-    & > div:nth-of-type(2) {
-        transform-origin: left bottom;
-    }
-    & > div:nth-of-type(3) {
-        transform-origin: right top;
-    }
-    & > div:nth-of-type(4) {
-        transform-origin: left top;
-    }
-`;
-
-const Box = styled(motion.div)`
+const Boards = styled.div`
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1) 0 10px 20px rgba(0, 0, 0, 0.5);
-`;
-
-const Circle = styled(motion.div)`
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-    background: #fff;
-`;
-
-const Overlay = styled(motion.div)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
+    align-items: flex-start;
     width: 100%;
-    height: 100%;
+    gap: 10px;
 `;
 
-const Button = styled(motion.button)`
-    width: 80px;
-    height: 40px;
-    background: #fff;
-    color: #000;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    margin-top: 30px;
-    font-size: 14px;
-    font-weight: 700;
-
-    &[data-clicked='true'] {
-        color: #54e98d;
-        scale: 1.2;
-    }
-`;
-
-const boxGestureVar = {
-    hover: {
-        scale: 1.1,
-    },
-};
-
-const overlayVar = {
-    initial: {
-        background: 'rgba(0,0,0,0)',
-    },
-    animate: {
-        background: 'rgba(0,0,0,0.7)',
-    },
-    exit: {
-        background: 'rgba(0,0,0,0)',
-    },
-};
-
-export default function App() {
-    const boxArr = ['1', '2', '3', '4'];
-    const [id, setId] = useState<string | null>(null);
-    const [clicked, setClicked] = useState(false);
+function App() {
+    const [allBoards, setAllBoards] = useRecoilState(allBoardsState);
+    const onDragEnd = (info: DropResult) => {
+        const { destination, draggableId, source } = info;
+        if (!destination) return;
+        if (destination?.droppableId === source.droppableId) {
+            // same board movement.
+            setAllBoards(oldBoards => {
+                const changedBoard = [...oldBoards[source.droppableId]];
+                changedBoard.splice(source.index, 1);
+                changedBoard.splice(destination?.index, 0, draggableId);
+                return {
+                    ...oldBoards,
+                    [source.droppableId]: changedBoard,
+                };
+            });
+        }
+        if (destination.droppableId !== source.droppableId) {
+            // cross board movement
+            setAllBoards(oldBoards => {
+                const fromBoard = [...allBoards[source.droppableId]];
+                const toBoard = [...oldBoards[destination.droppableId]];
+                fromBoard.splice(source.index, 1);
+                toBoard.splice(destination?.index, 0, draggableId);
+                return {
+                    ...oldBoards,
+                    [source.droppableId]: fromBoard,
+                    [destination.droppableId]: toBoard,
+                };
+            });
+        }
+    };
     return (
-        <Wrapper>
-            <Grid>
-                {boxArr.map(index => {
-                    return (
-                        <Box
-                            key={index}
-                            variants={boxGestureVar}
-                            whileHover="hover"
-                            layoutId={index}
-                            onClick={() => setId(index)}
-                        >
-                            {index === '2' && clicked ? (
-                                <Circle layoutId="circle" />
-                            ) : null}
-                            {index === '3' && !clicked ? (
-                                <Circle layoutId="circle" />
-                            ) : null}
-                        </Box>
-                    );
-                })}
-            </Grid>
-            <Button
-                data-clicked={clicked}
-                layout
-                onClick={() => setClicked(prev => !prev)}
-            >
-                Switch
-            </Button>
-            <AnimatePresence>
-                {id ? (
-                    <Overlay
-                        variants={overlayVar}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        onClick={() => setId(null)}
-                    >
-                        <Box
-                            style={{
-                                width: 200,
-                                background: 'rgba(255, 255, 255, 1)',
-                            }}
-                            layoutId={id}
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Wrapper>
+                <Boards>
+                    {Object.keys(allBoards).map(boardId => (
+                        <Board
+                            boardId={boardId}
+                            key={boardId}
+                            toDos={allBoards[boardId]}
                         />
-                    </Overlay>
-                ) : null}
-            </AnimatePresence>
-        </Wrapper>
+                    ))}
+                </Boards>
+            </Wrapper>
+        </DragDropContext>
     );
 }
+
+export default App;

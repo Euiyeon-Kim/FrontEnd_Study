@@ -1,11 +1,12 @@
 // import original module declarations
-import 'styled-components';
+import 'styled-components'
 
 // and extend them!
 declare module 'styled-components' {
     interface DefaultTheme {
-        bgColor: string;
-        boardColor: string;
-        cardColor: string;
+        textColor: string
+        bgColor: string
+        accentColor: string
+        cardBgColor: string
     }
 }
