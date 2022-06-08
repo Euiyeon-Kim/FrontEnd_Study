@@ -1,3 +1,13 @@
+# 목차
+
+1. [Week2](#week2)
+
+# Week2
+
+## Sraping이란?
+
+웹으로부터 정보를 가져오는 것
+
 ## Request
 - URL로 부터 정보 받아오기
     ~~~python
@@ -5,7 +15,7 @@
     ~~~
 
 ## BeautifulSoup
-- 받아온 정보 파싱하기
+- html 형태로 받아온 정보 파싱하기
     ~~~python
     indeed_soup = BeautifulSoup(indeed_result.text, "html.parser")
     ~~~

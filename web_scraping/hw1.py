@@ -29,7 +29,7 @@ def main():
       try:
         request = requests.get(url)
         if request.status_code == 200:
-          print(url,"is up!")
+          print(url, "is up!")
         else:
           print(url, "is down!")
       except:
